@@ -1,4 +1,5 @@
 sudo apt-get update
+sudo apt-get install dos2unix
 sudo apt-get install check
 sudo apt-get install pkg-config
 sudo apt-get install lcov

@@ -1,1 +1,2 @@
-target/** */
+clox/out/
+clox/coverage_report/

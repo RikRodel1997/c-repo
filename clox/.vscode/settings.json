@@ -1,0 +1,27 @@
+{
+    "files.associations": {
+        "type_traits": "cpp",
+        "memory.h": "c",
+        "mock_exit.h": "c",
+        "setjmp.h": "c",
+        "debug.h": "c",
+        "stdio.h": "c",
+        "mocks.h": "c",
+        "chunk.h": "c",
+        "check.h": "c",
+        "value.h": "c",
+        "vector": "c",
+        "string.h": "c",
+        "stdlib.h": "c",
+        "optional": "c",
+        "istream": "c",
+        "ostream": "c",
+        "system_error": "c",
+        "array": "c",
+        "tuple": "c",
+        "utility": "c",
+        "vm.h": "c",
+        "common.h": "c"
+    },
+    "C_Cpp.default.compilerPath": "C:/ProgramData/mingw64/mingw64/bin/gcc.exe"
+}
