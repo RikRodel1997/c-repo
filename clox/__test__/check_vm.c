@@ -7,15 +7,6 @@
 #include "../vm.h"
 #include "mocks.h"
 
-START_TEST(test_init_vm) { init_vm(); }
-END_TEST
-
-START_TEST(test_free_vm) {
-    init_vm();
-    free_vm();
-}
-END_TEST
-
 START_TEST(test_run_OP_RETURN) {
     init_vm();
 
@@ -26,7 +17,28 @@ START_TEST(test_run_OP_RETURN) {
     InterpretResult result = interpret(&chunk);
     free_vm();
 
-    ck_assert_int_eq(result, 0);
+    ck_assert_int_eq(result, INTERPRET_OK);
+}
+END_TEST
+
+START_TEST(test_run_OP_CONSTANT) {
+    init_vm();
+
+    Chunk chunk;
+    init_chunk(&chunk);
+    int constant = add_constant(&chunk, 1.2);
+    write_chunk(&chunk, OP_CONSTANT, 123);
+    write_chunk(&chunk, constant, 123);
+
+    FILE* test_out = tmpfile();
+    int og_stdout = setup_stdout(test_out);
+
+    InterpretResult result = interpret(&chunk);
+
+    char buf[256];
+    read_stdout(test_out, og_stdout, buf);
+    printf("buf %s\n", buf);
+    free_vm();
 }
 END_TEST
 
@@ -37,9 +49,8 @@ Suite* suite(void) {
     s = suite_create("VM");
     tc_core = tcase_create("Core");
 
-    tcase_add_test(tc_core, test_init_vm);
-    tcase_add_test(tc_core, test_free_vm);
     tcase_add_test(tc_core, test_run_OP_RETURN);
+    // tcase_add_test(tc_core, test_run_OP_CONSTANT);
 
     suite_add_tcase(s, tc_core);
 

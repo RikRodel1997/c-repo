@@ -1,5 +1,4 @@
 {
-    "prettier.ignorePath": ".prettierignore",
     "files.associations": {
         "type_traits": "cpp",
         "memory.h": "c",
@@ -23,5 +22,6 @@
         "utility": "c",
         "vm.h": "c",
         "common.h": "c"
-    }
+    },
+    "clang-format.executable": "C:/Program Files/LLVM/bin/clang-format.exe",
 }

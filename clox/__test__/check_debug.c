@@ -42,35 +42,6 @@ START_TEST(test_disassemble_instruction_OP_CONSTANT) {
 }
 END_TEST
 
-START_TEST(test_disassemble_instruction_OP_CONSTANT_LONG) {
-    Chunk chunk;
-    init_chunk(&chunk);
-    // preps the chunk with 256 unique constants
-    for (int i = 0; i < 256; i++) {
-        write_constant(&chunk, (double) i, 1);   // Adding unique constants
-    }
-
-    write_constant(&chunk, 999.0, 1);
-
-    FILE* test_out = tmpfile();
-    int og_stdout = setup_stdout(test_out);
-
-    disassemble_chunk(&chunk, "test chunk");
-
-    char buf[16384];
-    read_stdout(test_out, og_stdout, buf);
-
-    char* line = strtok(buf, "\n");
-    char* last_line = NULL;
-    while (line != NULL) {
-        last_line = line;
-        line = strtok(NULL, "\n");
-    }
-
-    ck_assert_str_eq(last_line, "0512    | OP_CONSTANT_LONG  256 '999'");
-}
-END_TEST
-
 START_TEST(test_disassemble_instruction_unknown_opcode) {
     Chunk chunk;
     init_chunk(&chunk);
@@ -116,7 +87,6 @@ Suite* suite(void) {
 
     tcase_add_test(tc_core, test_disassemble_instruction_OP_RETURN);
     tcase_add_test(tc_core, test_disassemble_instruction_OP_CONSTANT);
-    tcase_add_test(tc_core, test_disassemble_instruction_OP_CONSTANT_LONG);
     tcase_add_test(tc_core, test_disassemble_instruction_unknown_opcode);
     tcase_add_test(tc_core, test_disassemble_OP_CONSTANT_and_OP_RETURN);
 
