@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ ! -d "clox/out" ]; then
+  mkdir clox/out
+fi
+
 TEST_PATH="clox/__test__"
 OUT_PATH="clox/out"
 SRC_PATH="clox/src"

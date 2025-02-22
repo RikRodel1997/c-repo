@@ -26,16 +26,6 @@ START_TEST(test_parse_request_protocol) {
 }
 END_TEST
 
-// TODO: returns segmentation fault
-// START_TEST(test_parse_request_headers) {
-//     request req = parse_request("POST /home HTTP/1.1\r\nHost: localhost:4221");
-//     ck_assert_str_eq(req.method, "POST");
-//     ck_assert_str_eq(req.path, "/home");
-//     ck_assert_str_eq(req.protocol, "HTTP/1.1");
-//     ck_assert_str_eq(req.headers, "Host: localhost:4221");
-// }
-// END_TEST
-
 START_TEST(test_valid_method_true) {
     ck_assert_int_eq(valid_method("POST"), 1);
     ck_assert_int_eq(valid_method("GET"), 1);
@@ -79,7 +69,7 @@ START_TEST(test_echo_tail_doesnt_exists) {
 }
 END_TEST
 
-Suite* request_suite(void) {
+Suite* suite(void) {
     Suite* s;
     TCase* tc_core;
 
@@ -95,7 +85,6 @@ Suite* request_suite(void) {
     tcase_add_test(tc_core, test_echo_tail_doesnt_exists);
     tcase_add_test(tc_core, test_curl_user_agent);
     tcase_add_test(tc_core, test_python_user_agent);
-    // tcase_add_test(tc_core, test_parse_request_headers);
 
     suite_add_tcase(s, tc_core);
 
@@ -103,24 +92,9 @@ Suite* request_suite(void) {
 }
 
 int main(void) {
-    int number_failed;
-    Suite* s;
     SRunner* sr;
-
-    s = request_suite();
-    sr = srunner_create(s);
-
+    sr = srunner_create(suite());
     srunner_run_all(sr, CK_NORMAL);
-    number_failed = srunner_ntests_failed(sr);
+    srunner_ntests_failed(sr);
     srunner_free(sr);
-    printf("\n");
-
-    if (number_failed > 0) {
-        TestResult** results = srunner_failures(sr);
-        for (int i = 0; i < number_failed; i++) {
-            printf("Failure in %s: %s\n", tr_tcname(results[i]), tr_msg(results[i]));
-        }
-    } else {
-        printf("Unit tests for request.c passed\n");
-    }
 }

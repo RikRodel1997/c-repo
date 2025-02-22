@@ -1,4 +1,12 @@
+#ifdef __linux__
 #include <arpa/inet.h>
+#endif
+
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+
 #include <check.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -18,39 +26,24 @@ START_TEST(test_create_addr_in) {
 }
 END_TEST
 
-Suite* serv_settings_suite(void) {
+Suite* suite(void) {
     Suite* s;
-    TCase* tc_core;
+    TCase* core;
 
     s = suite_create("Server Settings");
-    tc_core = tcase_create("Core");
+    core = tcase_create("Core");
 
-    tcase_add_test(tc_core, test_create_addr_in);
+    tcase_add_test(core, test_create_addr_in);
 
-    suite_add_tcase(s, tc_core);
+    suite_add_tcase(s, core);
 
     return s;
 }
 
 int main(void) {
-    int number_failed;
-    Suite* s;
     SRunner* sr;
-
-    s = serv_settings_suite();
-    sr = srunner_create(s);
-
+    sr = srunner_create(suite());
     srunner_run_all(sr, CK_NORMAL);
-    number_failed = srunner_ntests_failed(sr);
+    srunner_ntests_failed(sr);
     srunner_free(sr);
-    printf("\n");
-
-    if (number_failed > 0) {
-        TestResult** results = srunner_failures(sr);
-        for (int i = 0; i < number_failed; i++) {
-            printf("Failure in %s: %s\n", tr_tcname(results[i]), tr_msg(results[i]));
-        }
-    } else {
-        printf("Unit tests for serv_settings.c passed\n");
-    }
 }

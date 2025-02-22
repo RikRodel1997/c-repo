@@ -28,6 +28,8 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
+    printf("Server started. Logs will show up here.\n");
+
     while (true) {
         int accept_fd = accept(server_sock, (struct sockaddr*) &client_addr, &client_addr_len);
         if (accept_fd < 0) {
