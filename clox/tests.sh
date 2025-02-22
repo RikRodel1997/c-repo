@@ -15,7 +15,7 @@ gcc -DTESTING -O0 -o $OUT_PATH/check_debug $TEST_PATH/check_debug.c $SRC_PATH/*.
 $OUT_PATH/check_debug
 gcc -DTESTING -O0 -o $OUT_PATH/check_value $TEST_PATH/check_value.c $SRC_PATH/*.c $MOCK_LIBS $TEST_FLAGS
 $OUT_PATH/check_value
-gcc -DTESTING -O0 -o $OUT_PATH/check_vm $TEST_PATH/check_vm.c $SRC_PATH/*.c $MOCK_LIBS $TEST_FLAGS
+gcc -DTESTING -DDEBUG_TRACE_EXECUTION=0 -DRUN_TEST=0 -O0 -o $OUT_PATH/check_vm $TEST_PATH/check_vm.c $SRC_PATH/*.c $MOCK_LIBS $TEST_FLAGS
 $OUT_PATH/check_vm
 
 rm -f $OUT_PATH/*-mocks.*

@@ -20,7 +20,7 @@ START_TEST(test_write_chunk_1_byte) {
     write_chunk(&chunk, OP_RETURN, 1);
     ck_assert_int_eq(chunk.count, 1);
     ck_assert_int_eq(chunk.capacity, 8);
-    ck_assert_int_eq(chunk.code[0], 1);   // OP_RETURN (index in enum)
+    ck_assert_int_eq(chunk.code[0], OP_RETURN);   // OP_RETURN (index in enum)
 }
 END_TEST
 

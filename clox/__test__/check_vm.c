@@ -21,23 +21,35 @@ START_TEST(test_run_OP_RETURN) {
 }
 END_TEST
 
-START_TEST(test_run_OP_CONSTANT) {
+START_TEST(test_run_binary_operators) {
     init_vm();
 
     Chunk chunk;
     init_chunk(&chunk);
-    int constant = add_constant(&chunk, 1.2);
-    write_chunk(&chunk, OP_CONSTANT, 123);
-    write_chunk(&chunk, constant, 123);
 
-    FILE* test_out = tmpfile();
-    int og_stdout = setup_stdout(test_out);
+    write_chunk(&chunk, OP_CONSTANT, 0);
+    write_chunk(&chunk, add_constant(&chunk, 1.2), 0);
+    write_chunk(&chunk, OP_CONSTANT, 0);
+    write_chunk(&chunk, add_constant(&chunk, 3), 0);
+    write_chunk(&chunk, OP_ADD, 0);
+
+    write_chunk(&chunk, OP_CONSTANT, 0);
+    write_chunk(&chunk, add_constant(&chunk, 1), 0);
+    write_chunk(&chunk, OP_SUBTRACT, 0);
+
+    write_chunk(&chunk, OP_CONSTANT, 0);
+    write_chunk(&chunk, add_constant(&chunk, 1.5), 0);
+    write_chunk(&chunk, OP_MULTIPLY, 0);
+
+    write_chunk(&chunk, OP_CONSTANT, 0);
+    write_chunk(&chunk, add_constant(&chunk, 2), 0);
+    write_chunk(&chunk, OP_DIVIDE, 0);
+
+    write_chunk(&chunk, OP_NEGATE, 0);
+    write_chunk(&chunk, OP_RETURN, 0);
 
     InterpretResult result = interpret(&chunk);
 
-    char buf[256];
-    read_stdout(test_out, og_stdout, buf);
-    printf("buf %s\n", buf);
     free_vm();
 }
 END_TEST
@@ -50,7 +62,7 @@ Suite* suite(void) {
     tc_core = tcase_create("Core");
 
     tcase_add_test(tc_core, test_run_OP_RETURN);
-    // tcase_add_test(tc_core, test_run_OP_CONSTANT);
+    tcase_add_test(tc_core, test_run_binary_operators);
 
     suite_add_tcase(s, tc_core);
 
