@@ -1,7 +1,10 @@
 #include "../vm.h"
 #include "../common.h"
+#include "../compiler.h"
 #include "../debug.h"
 #include <stdio.h>
+
+void reset_stack();
 
 #define READ_BYTE()     (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
@@ -13,22 +16,6 @@
     } while (false)
 
 VM vm;
-
-static void reset_stack() { vm.stack_top = vm.stack; }
-
-void init_vm() { reset_stack(); }
-
-void free_vm() {}
-
-void push(Value value) {
-    *vm.stack_top = value;
-    vm.stack_top++;
-}
-
-Value pop() {
-    vm.stack_top--;
-    return *vm.stack_top;
-}
 
 static InterpretResult run() {
 
@@ -80,10 +67,25 @@ static InterpretResult run() {
     }
 }
 
-InterpretResult interpret(Chunk* chunk) {
-    vm.chunk = chunk;
-    vm.ip = vm.chunk->code;
-    return run();
+InterpretResult interpret(const char* source) {
+    compile(source);
+    return INTERPRET_OK;
+}
+
+void reset_stack() { vm.stack_top = vm.stack; }
+
+void init_vm() { reset_stack(); }
+
+void free_vm() {}
+
+void push(Value value) {
+    *vm.stack_top = value;
+    vm.stack_top++;
+}
+
+Value pop() {
+    vm.stack_top--;
+    return *vm.stack_top;
 }
 
 #undef READ_BYTE
