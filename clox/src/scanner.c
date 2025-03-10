@@ -6,9 +6,15 @@
 #include "../scanner.h"
 
 bool is_at_end();
+bool match(char expected);
+
 Token make_token(TokenType type);
 Token error_token(const char* msg);
+
 char advance();
+char peek();
+char peek_next();
+void skip_whitespace();
 
 typedef struct {
     const char* start;
@@ -25,6 +31,7 @@ void init_scanner(const char* source) {
 }
 
 Token scan_token() {
+    skip_whitespace();
     scanner.start = scanner.curr;
     if (is_at_end()) {
         return make_token(TOKEN_EOF);
@@ -54,6 +61,30 @@ Token scan_token() {
         return make_token(TOKEN_SLASH);
     case '*':
         return make_token(TOKEN_STAR);
+    case '!':
+        if (match('=')) {
+            return make_token(TOKEN_BANG_EQUAL);
+        } else {
+            return make_token(TOKEN_BANG);
+        }
+    case '=':
+        if (match('=')) {
+            return make_token(TOKEN_EQUAL_EQUAL);
+        } else {
+            return make_token(TOKEN_EQUAL);
+        }
+    case '<':
+        if (match('=')) {
+            return make_token(TOKEN_LESS_EQUAL);
+        } else {
+            return make_token(TOKEN_LESS);
+        }
+    case '>':
+        if (match('=')) {
+            return make_token(TOKEN_GREATER_EQUAL);
+        } else {
+            return make_token(TOKEN_GREATER);
+        }
     }
 
     return error_token("Unexpected character.");
@@ -82,4 +113,52 @@ Token error_token(const char* msg) {
 char advance() {
     scanner.curr++;
     return scanner.curr[-1];
+}
+
+bool match(char expected) {
+    if (is_at_end()) {
+        return false;
+    }
+    if (*scanner.curr != expected) {
+        return false;
+    }
+    scanner.curr++;
+    return true;
+}
+
+void skip_whitespace() {
+    for (;;) {
+        char c = peek();
+        switch (c) {
+        case ' ':
+        case '\r':
+        case '\t':
+            advance();
+            break;
+        case '\n':
+            scanner.line++;
+            advance();
+            break;
+        case '/':
+            if (peek_next() == '/') {
+                while (peek() != '\n' && !is_at_end()) {
+                    advance();
+                }
+            } else {
+                return;
+            }
+            break;
+        default:
+            return;
+        }
+    }
+}
+
+char peek() { return *scanner.curr; }
+
+char peek_next() {
+    if (is_at_end()) {
+        return '\0';
+    }
+    return scanner.curr[1];
 }
