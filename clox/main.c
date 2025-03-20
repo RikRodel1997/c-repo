@@ -66,7 +66,12 @@ char* read_file(const char* path) {
     size_t file_size = ftell(file);
     rewind(file);
 
-    char* buf = (char*) malloc(file_size);
+    char* buf = (char*) malloc(file_size + 1);
+    if (buf == NULL) {
+        fprintf(stderr, "Not enough memory to read \"%s\".\n", path);
+        exit(74);
+    }
+
     size_t bytes_read = fread(buf, sizeof(char), file_size, file);
     if (bytes_read < file_size) {
         fprintf(stderr, "Could not read file \"%s\".\n", path);
