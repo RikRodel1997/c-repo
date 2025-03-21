@@ -78,8 +78,69 @@ END_TEST
 START_TEST(test_skipping) {
     init_scanner(" \r\t//\n//\0");
     scan_token();
-    Token tk = scan_token();
-    ck_assert_int_eq(tk.type, TOKEN_EOF);
+    ck_assert_int_eq(scan_token().type, TOKEN_EOF);
+}
+END_TEST
+
+START_TEST(test_string) {
+    init_scanner("\"xst123\"");
+    ck_assert_int_eq(scan_token().type, TOKEN_STRING);
+
+    init_scanner("\"xst\n123");
+    ck_assert_int_eq(scan_token().type, TOKEN_ERROR);
+}
+END_TEST
+
+START_TEST(test_number) {
+    init_scanner("12");
+    ck_assert_int_eq(scan_token().type, TOKEN_NUMBER);
+
+    init_scanner("1");
+    ck_assert_int_eq(scan_token().type, TOKEN_NUMBER);
+
+    init_scanner("1.1");
+    ck_assert_int_eq(scan_token().type, TOKEN_NUMBER);
+}
+END_TEST
+
+START_TEST(test_identifier) {
+    init_scanner("xt12314tewst");
+    ck_assert_int_eq(scan_token().type, TOKEN_IDENTIFIER);
+}
+END_TEST
+
+START_TEST(test_keywords) {
+    char* keywords[16] = {"and", "class", "else",   "false", "for",  "fun",  "if",  "nil",
+                          "or",  "print", "return", "super", "this", "true", "var", "while"};
+    TokenType expected[16] = {
+        TOKEN_AND, TOKEN_CLASS, TOKEN_ELSE,   TOKEN_FALSE, TOKEN_FOR,  TOKEN_FUN,  TOKEN_IF,  TOKEN_NIL,
+        TOKEN_OR,  TOKEN_PRINT, TOKEN_RETURN, TOKEN_SUPER, TOKEN_THIS, TOKEN_TRUE, TOKEN_VAR, TOKEN_WHILE,
+    };
+    for (int i = 0; i < 16; i++) {
+        char* keyword = keywords[i];
+        TokenType expected_tokentype = expected[i];
+        init_scanner(keyword);
+        Token tk = scan_token();
+        ck_assert_int_eq(tk.type, expected_tokentype);
+    }
+}
+END_TEST
+
+START_TEST(test_keywords_start) {
+    init_scanner("t");
+    Token tk_t = scan_token();
+    ck_assert_int_eq(tk_t.type, TOKEN_IDENTIFIER);
+
+    init_scanner("f");
+    Token tk_f = scan_token();
+    ck_assert_int_eq(tk_f.type, TOKEN_IDENTIFIER);
+}
+END_TEST
+
+START_TEST(test_keywords_autocomplete) {
+    init_scanner("anx");
+    Token tk_and = scan_token();
+    ck_assert_int_eq(tk_and.type, TOKEN_IDENTIFIER);
 }
 END_TEST
 
@@ -95,6 +156,12 @@ Suite* suite(void) {
     tcase_add_test(tc_core, test_unexpected_token);
     tcase_add_test(tc_core, test_double_char_no_match);
     tcase_add_test(tc_core, test_skipping);
+    tcase_add_test(tc_core, test_string);
+    tcase_add_test(tc_core, test_number);
+    tcase_add_test(tc_core, test_identifier);
+    tcase_add_test(tc_core, test_keywords);
+    tcase_add_test(tc_core, test_keywords_start);
+    tcase_add_test(tc_core, test_keywords_autocomplete);
 
     suite_add_tcase(s, tc_core);
     return s;

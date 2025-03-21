@@ -63,10 +63,5 @@ void init_scanner(const char* source);
 Token scan_token();
 bool is_digit(char c);
 bool is_alpha(char c);
-bool is_at_end();
-Token identifier();
-Token number();
-Token string();
-TokenType check_keyword(int start, int len, const char* rest, TokenType type);
 
 #endif
