@@ -1,7 +1,7 @@
-#include "../vm.h"
-#include "../common.h"
-#include "../compiler.h"
-#include "../debug.h"
+#include "../include/vm.h"
+#include "../include/common.h"
+#include "../include/compiler.h"
+#include "../include/debug.h"
 #include <stdio.h>
 
 void reset_stack();

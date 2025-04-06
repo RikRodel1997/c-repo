@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../common.h"
-#include "../compiler.h"
-#include "../scanner.h"
-#include "../vm.h"
+#include "../include/common.h"
+#include "../include/compiler.h"
+#include "../include/scanner.h"
+#include "../include/vm.h"
 
 #ifdef DEBUG_PRINT_CODE
-#include "../debug.h"
+#include "../include/debug.h"
 #endif
 
 Parser parser;
@@ -124,7 +124,7 @@ void expression() { parse_precedence(PREC_ASSIGNMENT); }
 
 void parse_number() {
     double value = strtod(parser.previous.start, NULL);
-    emit_constant(value);
+    emit_constant(NUMBER_VAL(value));
 }
 
 void grouping() {

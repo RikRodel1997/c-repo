@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../memory.h"
+#include "../include/memory.h"
 #include "mocks.h"
 
 START_TEST(reallocate_new_allocation) { ck_assert_ptr_ne(reallocate(NULL, 0, 1), NULL); }

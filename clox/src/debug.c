@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "../chunk.h"
-#include "../debug.h"
-#include "../value.h"
+#include "../include/chunk.h"
+#include "../include/debug.h"
+#include "../include/value.h"
 
 static int simple_instruction(const char* name, int offset) {
     printf("%s\n", name);

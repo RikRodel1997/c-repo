@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../common.h"
-#include "../scanner.h"
+#include "../include/common.h"
+#include "../include/scanner.h"
 
 bool is_at_end();
 bool match(char expected);

@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../compiler.h"
-#include "../scanner.h"
+#include "../include/compiler.h"
+#include "../include/scanner.h"
 #include "mocks.h"
 
 START_TEST(test_simple_binary_expressions) {
@@ -36,8 +36,8 @@ START_TEST(test_simple_binary_expressions) {
 
         ck_assert(result == true);
         ck_assert_int_eq(chunk.constants.count, 2);
-        ck_assert_int_eq(chunk.constants.values[0], 1);
-        ck_assert_int_eq(chunk.constants.values[1], 2);
+        ck_assert_int_eq(AS_NUMBER(chunk.constants.values[0]), 1);
+        ck_assert_int_eq(AS_NUMBER(chunk.constants.values[1]), 2);
     }
 }
 END_TEST
