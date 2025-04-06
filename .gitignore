@@ -1,2 +1,3 @@
 out/
 coverage_report/
+**/__test__/cov

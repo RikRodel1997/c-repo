@@ -17,9 +17,9 @@ typedef struct {
     char protocol[PROTOCOL_LENGTH];
     char headers[HEADER_LENGTH];
     char body[BODY_LENGTH];
-} request;
+} Request;
 
-request parse_request(char* received_request);
+Request parse_request(char* received_request);
 void get_echo_tail(const char* path, char* tail);
 int valid_method(char* method);
 void parse_user_agent(char* headers, char* user_agent);

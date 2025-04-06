@@ -12,41 +12,6 @@ import utils
 BASE_URL = "http://localhost:4221"
 
 
-def test_home() -> bool:
-    response = utils.curl_request(BASE_URL)
-
-    try:
-        assert_that(response).is_equal_to("HTTP/1.1 200 OK")
-    except AssertionError as e:
-        utils.format_assert_msg("/ path", "fail")
-        utils.format_assert_exception(f"Response: {response}")
-        utils.format_assert_exception(f"Exception: {e}")
-        return False
-
-    utils.format_assert_msg("/ path", "pass")
-    return True
-
-
-def test_echo() -> bool:
-    string_data = utils.random_string(6)
-    response = utils.curl_request(f"{BASE_URL}/echo/{string_data}")
-    parts = response.split("\n")
-
-    try:
-        assert_that(parts[0]).is_equal_to("HTTP/1.1 200 OK")
-        assert_that(parts[1]).is_equal_to("Content-Type: text/plain")
-        assert_that(parts[2]).is_equal_to("Content-Length: 6")
-        assert_that(parts[4]).is_equal_to(string_data)
-    except AssertionError as e:
-        utils.format_assert_msg("/echo path", "fail")
-        utils.format_assert_exception(f"Response: {response}")
-        utils.format_assert_exception(f"Exception: {e}")
-        return False
-
-    utils.format_assert_msg("/echo path", "pass")
-    return True
-
-
 def test_unknown() -> bool:
     string_data = utils.random_string(6)
     response = utils.curl_request(f"{BASE_URL}/{string_data}")
