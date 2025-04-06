@@ -35,7 +35,7 @@ genhtml http-server/__test__/cov/coverage_filtered.info --output-directory http-
 
 echo -e "\n----  Integration tests  ----"
 gcc http-server/main.c http-server/src/*.c -lz -o http-server/out/server
-http-server/out/server > /dev/null 2>&1 &
+http-server/out/server --directory /files &
 SERVER_PID=$!
 
 assert_eq() {
@@ -47,19 +47,25 @@ assert_eq() {
     expected=$(echo "$expected" | xargs)
 
     if [ "$actual" = "$expected" ]; then
-        echo -e " \xE2\x9C\x94  $test_name"
+        echo -e "  \xE2\x9C\x94  $test_name"
     else
-        echo -e " \e[31m\u274C\e[0m  $test_name \n\texpected: $expected\n\tactual  : $actual"
+        echo -e "  \e[31m\u274C\e[0m  $test_name \n\texpected: $expected\n\tactual  : $actual"
     fi
 }
 
 CASES=(
     "curl -i -s http://localhost:4221" 
     "curl -i -s http://localhost:4221/echo/string"
+    "curl -i -s http://localhost:4221/string"
+    "curl -i -s http://localhost:4221/user-agent"
+    "curl -i -s http://localhost:4221/files/file_4334 -H Content-Type: application/octet-stream --data file_content_4334"
 )
 EXPECTED=(
     "HTTP/1.1 200 OK" 
     "HTTP/1.1 200 OK Content-Type: text/plain Content-Length: 6 string"
+    "HTTP/1.1 404 Not Found"
+    "HTTP/1.1 200 OK Content-Type: text/plain Content-Length: 10 curl/8.5.0" 
+    "HTTP/1.1 201 Created" 
 )
 
 for IDX in "${!CASES[@]}"; do
