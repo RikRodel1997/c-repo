@@ -23,7 +23,8 @@
     "vm.h": "c",
     "common.h": "c",
     "scanner.h": "c",
-    "compiler.h": "c"
+    "compiler.h": "c",
+    "stdint.h": "c"
   },
   "clang-format.executable": "C:/Program Files/LLVM/bin/clang-format.exe"
 }

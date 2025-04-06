@@ -55,10 +55,20 @@ START_TEST(test_disassemble_binary_operators) {
 
     char buf[1024];
     read_stdout(test_out, og_stdout, buf);
-    ck_assert_str_eq(buf, "== test chunk ==\n0000    0 OP_CONSTANT         0 '1.2'\n0002    | OP_CONSTANT         1 "
-                          "'3'\n0004    | OP_ADD\n0005    | OP_CONSTANT         2 '1'\n0007    | OP_SUBTRACT\n0008    "
-                          "| OP_CONSTANT         3 '1.5'\n0010    | OP_MULTIPLY\n0011    | OP_CONSTANT         4 "
-                          "'2'\n0013    | OP_DIVIDE\n0014    | OP_NEGATE\n0015    | OP_RETURN");
+    char* expected_out = "== test chunk ==\n"
+                         "0000    0 OP_CONSTANT         0 '1.2'\n"
+                         "0002    | OP_CONSTANT         1 '3'\n"
+                         "0004    | OP_ADD\n"
+                         "0005    | OP_CONSTANT         2 '1'\n"
+                         "0007    | OP_SUBTRACT\n"
+                         "0008    | OP_CONSTANT         3 '1.5'\n"
+                         "0010    | OP_MULTIPLY\n"
+                         "0011    | OP_CONSTANT         4 '2'\n"
+                         "0013    | OP_DIVIDE\n"
+                         "0014    | OP_NEGATE\n"
+                         "0015    | OP_RETURN";
+
+    ck_assert_str_eq(buf, expected_out);
 }
 END_TEST
 

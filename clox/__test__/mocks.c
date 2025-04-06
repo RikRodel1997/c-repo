@@ -36,3 +36,25 @@ void read_stdout(FILE* test_out, int og_stdout, char* buf) {
         buf[--len] = '\0';
     }
 }
+
+int setup_stderr(FILE* test_out) {
+    int og_stdout = dup(STDERR_FILENO);
+    dup2(fileno(test_out), STDERR_FILENO);
+    return og_stdout;
+}
+
+void read_stderr(FILE* test_out, int og_stdout, char* buf) {
+    fflush(stderr);
+    fseek(test_out, 0, SEEK_SET);
+
+    size_t bytes = fread(buf, 1, 16384, test_out);
+    buf[bytes] = '\0';
+
+    dup2(og_stdout, STDERR_FILENO);
+    close(og_stdout);
+
+    size_t len = strlen(buf);
+    while (len > 0 && (buf[len - 1] == '\n' || buf[len - 1] == ' ')) {
+        buf[--len] = '\0';
+    }
+}

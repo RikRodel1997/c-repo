@@ -6,6 +6,10 @@
 #include "../scanner.h"
 #include "../vm.h"
 
+#ifdef DEBUG_PRINT_CODE
+#include "../debug.h"
+#endif
+
 Parser parser;
 Chunk* compiling_chunk;
 
@@ -28,7 +32,14 @@ bool compile(const char* source, Chunk* chunk) {
     return !parser.had_error;
 }
 
-void end_compiler() { emit_return(); }
+void end_compiler() {
+    emit_return();
+#ifdef DEBUG_PRINT_CODE
+    if (!parser.had_error) {
+        disassemble_chunk(current_chunk(), "code");
+    }
+#endif
+}
 
 /**
  * Util functions
@@ -138,8 +149,8 @@ void unary() {
 
 void binary() {
     TokenType operator_type = parser.previous.type;
-    // ParseRule* rule = get_rule(operator_type);
-    // parse_precedence((Precedence) (rule->precedence + 1));
+    ParseRule* rule = get_rule(operator_type);
+    parse_precedence((Precedence) (rule->precedence + 1));
 
     switch (operator_type) {
     case TOKEN_PLUS:
@@ -202,6 +213,20 @@ ParseRule rules[] = {
     [TOKEN_EOF] = {NULL, NULL, PREC_NONE},
 };
 
-void parse_precedence(Precedence precedence) {}
+void parse_precedence(Precedence precedence) {
+    advance_parser();
+    ParseFn prefix_rule = get_rule(parser.previous.type)->prefix;
+    if (prefix_rule == NULL) {
+        error("Expect expression.");
+        return;
+    }
 
-ParseRule* getRule(TokenType type) { return &rules[type]; }
+    prefix_rule();
+
+    while (precedence <= get_rule(parser.current.type)->precedence) {
+        advance_parser();
+        ParseFn infix_rule = get_rule(parser.previous.type)->infix;
+        infix_rule();
+    }
+}
+ParseRule* get_rule(TokenType type) { return &rules[type]; }

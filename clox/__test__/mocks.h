@@ -5,7 +5,6 @@
 #include <stddef.h>
 #include <stdio.h>
 
-
 extern jmp_buf exit_buffer;
 extern int exit_code;
 
@@ -16,5 +15,7 @@ extern int exit_code;
 void mock_exit(int code);
 int setup_stdout(FILE* test_out);
 void read_stdout(FILE* test_out, int og_stdout, char* buf);
+int setup_stderr(FILE* test_out);
+void read_stderr(FILE* test_out, int og_stdout, char* buf);
 
 #endif
