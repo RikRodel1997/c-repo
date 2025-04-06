@@ -4,8 +4,8 @@
 #include <string.h>
 #include <zlib.h>
 
-#include "request.h"
-#include "serv_settings.h"
+#include "include/request.h"
+#include "include/serv_settings.h"
 
 #define BUFFER_SIZE      8192
 #define DIR_BUFF         256
@@ -14,6 +14,8 @@
 void get_dir(int argc, char* argv[], char* dir);
 
 int main(int argc, char* argv[]) {
+    strcpy(argv[0], "http-server-c");
+
     char dir[DIR_BUFF];
     get_dir(argc, argv, dir);
 
@@ -51,7 +53,7 @@ int main(int argc, char* argv[]) {
         char response_buff[BUFFER_SIZE + HTTP_HEADER_SIZE] = {0};
         char* file_response = NULL;
 
-        request req = parse_request(req_buff);
+        Request req = parse_request(req_buff);
         char* method = req.method;
         char* path = req.path;
         char* headers = req.headers;

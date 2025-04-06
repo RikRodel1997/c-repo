@@ -1,7 +1,7 @@
 #include "../include/request.h"
 
-request parse_request(char* received_request) {
-    request req;
+Request parse_request(char* received_request) {
+    Request req;
     char method[METHOD_LENGTH];
     char path[PATH_LENGTH];
     char protocol[PROTOCOL_LENGTH];

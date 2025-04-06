@@ -4,21 +4,21 @@
 #include "../include/request.h"
 
 START_TEST(test_parse_request_post_home) {
-    request req = parse_request("POST /home");
+    Request req = parse_request("POST /home");
     ck_assert_str_eq(req.method, "POST");
     ck_assert_str_eq(req.path, "/home");
 }
 END_TEST
 
 START_TEST(test_parse_request_invalid_method) {
-    request req = parse_request("TOOLONGMETHOD /home");
+    Request req = parse_request("TOOLONGMETHOD /home");
     ck_assert_str_eq(req.method, "");
     ck_assert_str_eq(req.path, "/invalid");
 }
 END_TEST
 
 START_TEST(test_parse_request_protocol) {
-    request req = parse_request("POST /home HTTP/1.1");
+    Request req = parse_request("POST /home HTTP/1.1");
     ck_assert_str_eq(req.method, "POST");
     ck_assert_str_eq(req.path, "/home");
     ck_assert_str_eq(req.protocol, "HTTP/1.1");
