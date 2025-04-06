@@ -14,11 +14,10 @@
 void get_dir(int argc, char* argv[], char* dir);
 
 int main(int argc, char* argv[]) {
-    strcpy(argv[0], "http-server-c");
-
     char dir[DIR_BUFF];
     get_dir(argc, argv, dir);
 
+    printf("dir %s\n", dir);
     setbuf(stdout, NULL);
 
     addr_in client_addr;
@@ -133,16 +132,14 @@ int main(int argc, char* argv[]) {
             snprintf(file_path, sizeof(file_path), "%s/%s", dir, file_name);
 
             if (body != NULL) {
-                size_t body_len = strlen(body);
-
-                FILE* file_ptr = fopen(strcat(file_path, ".txt"), "w");
+                FILE* file_ptr = fopen("http-server/files/test.txt", "w");
                 if (file_ptr == NULL) {
                     perror("Error opening file\n");
                     strncpy(res, "HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n",
                             BUFFER_SIZE + HTTP_HEADER_SIZE);
                 }
 
-                fwrite(body, 1, body_len, file_ptr);
+                fwrite(body, 1, strlen(body), file_ptr);
                 fclose(file_ptr);
                 strncpy(res, "HTTP/1.1 201 Created\r\n\r\n", BUFFER_SIZE + HTTP_HEADER_SIZE);
             } else {

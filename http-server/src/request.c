@@ -17,7 +17,6 @@ Request parse_request(char* received_request) {
 
     while (token != NULL) {
         iteration++;
-
         if (iteration == 1) {
             sscanf(token, "%6s %255s %9s", method, path, protocol);
             int method_valid = valid_method(method);
@@ -38,7 +37,7 @@ Request parse_request(char* received_request) {
                 strncpy(req.path, path, PATH_LENGTH - 1);
                 req.path[PATH_LENGTH - 1] = '\0';
             }
-        } else if (iteration == 7) {
+        } else if (iteration == 6) {
             strncpy(body, token, BODY_LENGTH - 1);
             body[BODY_LENGTH - 1] = '\0';
             strncpy(req.body, body, BODY_LENGTH - 1);
