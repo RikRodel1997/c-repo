@@ -8,6 +8,9 @@ LIBS="-lcheck -lm -lpthread -lrt -lsubunit"
 
 gcc -o $OUT_PATH/check_request $TEST_PATH/check_request.c $SRC_PATH/request.c $LIBS && $OUT_PATH/check_request
 gcc -o $OUT_PATH/check_serv_settings $TEST_PATH/check_serv_settings.c $SRC_PATH/serv_settings.c $LIBS && $OUT_PATH/check_serv_settings
+##########################
+###     UNIT TESTS     ###
+##########################
 if [ ! -d "http-server/out" ]; then
   mkdir http-server/out
 fi
@@ -31,11 +34,12 @@ lcov --remove http-server/__test__/cov/http-server-coverage.info "*$TEST_PATH/*"
 genhtml http-server/__test__/cov/coverage_filtered.info --output-directory http-server/__test__/cov -q > /dev/null 2>&1
 
 
-
-
+###########################
+###  INTEGRATION TESTS  ###
+###########################
 echo -e "\n----  Integration tests  ----"
 gcc http-server/main.c http-server/src/*.c -lz -o http-server/out/server
-http-server/out/server --directory /files &
+http-server/out/server > /dev/null 2>&1 &
 SERVER_PID=$!
 
 assert_eq() {
@@ -53,12 +57,20 @@ assert_eq() {
     fi
 }
 
+CHARS='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+N=8
+
+STR=
+for ((i = 0; i < N; ++i)); do
+    STR+=${CHARS:RANDOM%${#CHARS}:1}
+done
+
 CASES=(
     "curl -i -s http://localhost:4221" 
     "curl -i -s http://localhost:4221/echo/string"
     "curl -i -s http://localhost:4221/string"
     "curl -i -s http://localhost:4221/user-agent"
-    "curl -i -s http://localhost:4221/files/file_4334 -H Content-Type: application/octet-stream --data file_content_4334"
+    "curl -i -s http://localhost:4221/files/file_$STR -H Content-Type: application/octet-stream --data file_content_$STR"
 )
 EXPECTED=(
     "HTTP/1.1 200 OK" 
