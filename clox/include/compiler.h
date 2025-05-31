@@ -68,6 +68,7 @@ void emit_constant(Value value);
  */
 void expression();
 void parse_number();
+void parse_literal();
 void grouping();
 void unary();
 void binary();
