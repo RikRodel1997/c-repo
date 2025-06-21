@@ -3,7 +3,7 @@ if [ ! -d "clox/out" ]; then
   mkdir clox/out
 fi
 
-TEST_PATH="clox/__test__"
+TEST_PATH="clox/tests"
 OUT_PATH="clox/out"
 SRC_PATH="clox/src"
 

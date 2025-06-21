@@ -1,8 +1,6 @@
 #include <stdbool.h>
-#include <stdio.h>
 #include <string.h>
 
-#include "../include/common.h"
 #include "../include/scanner.h"
 
 bool is_at_end();

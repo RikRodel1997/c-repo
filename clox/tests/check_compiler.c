@@ -1,10 +1,8 @@
 #include <check.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "../include/compiler.h"
-#include "../include/scanner.h"
 #include "mocks.h"
 
 START_TEST(test_simple_binary_expressions) {

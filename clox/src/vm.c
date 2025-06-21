@@ -3,7 +3,6 @@
 
 #include "../include/common.h"
 #include "../include/compiler.h"
-#include "../include/debug.h"
 #include "../include/vm.h"
 
 void reset_stack();
@@ -133,7 +132,7 @@ void runtime_error(const char* format, ...) {
     size_t instruction = vm.ip - vm.chunk->code - 1;
     int line = vm.chunk->lines[instruction];
     fprintf(stderr, "[line %d] in script\n", line);
-    resetStack();
+    reset_stack();
 }
 
 #undef READ_BYTE

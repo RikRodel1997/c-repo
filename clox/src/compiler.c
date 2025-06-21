@@ -4,7 +4,6 @@
 #include "../include/common.h"
 #include "../include/compiler.h"
 #include "../include/scanner.h"
-#include "../include/vm.h"
 
 #ifdef DEBUG_PRINT_CODE
 #include "../include/debug.h"

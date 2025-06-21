@@ -9,9 +9,8 @@
 
 #include <check.h>
 #include <stdbool.h>
-#include <stdlib.h>
 
-#include "../serv_settings.h"
+#include "../include/serv_settings.h"
 
 START_TEST(test_create_addr_in) {
     addr_in addr = create_addr_in(9999);
