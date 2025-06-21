@@ -1,9 +1,8 @@
 #include <check.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdlib.h>
 
-#include "../scanner.h"
+#include "../include/scanner.h"
 
 START_TEST(test_single_char_scans) {
     char* tokens[15] = {"(", ")", "{", "}", ",", ".", "-", "+", ";", "/", "*", "!", "=", ">", "<"};
@@ -92,14 +91,11 @@ START_TEST(test_string) {
 END_TEST
 
 START_TEST(test_number) {
-    init_scanner("12");
-    ck_assert_int_eq(scan_token().type, TOKEN_NUMBER);
-
-    init_scanner("1");
-    ck_assert_int_eq(scan_token().type, TOKEN_NUMBER);
-
-    init_scanner("1.1");
-    ck_assert_int_eq(scan_token().type, TOKEN_NUMBER);
+    char* nums[3] = {"12", "1", "1.1"};
+    for (int i = 0; i < 3; i++) {
+        init_scanner(nums[i]);
+        ck_assert_int_eq(scan_token().type, TOKEN_NUMBER);
+    }
 }
 END_TEST
 

@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../common.h"
-#include "../compiler.h"
-#include "../scanner.h"
-#include "../vm.h"
+#include "../include/common.h"
+#include "../include/compiler.h"
+#include "../include/scanner.h"
 
 #ifdef DEBUG_PRINT_CODE
-#include "../debug.h"
+#include "../include/debug.h"
 #endif
 
 Parser parser;
@@ -124,7 +123,23 @@ void expression() { parse_precedence(PREC_ASSIGNMENT); }
 
 void parse_number() {
     double value = strtod(parser.previous.start, NULL);
-    emit_constant(value);
+    emit_constant(NUMBER_VAL(value));
+}
+
+void parse_literal() {
+    switch (parser.previous.type) {
+    case TOKEN_FALSE:
+        emit_byte(OP_FALSE);
+        break;
+    case TOKEN_NIL:
+        emit_byte(OP_NIL);
+        break;
+    case TOKEN_TRUE:
+        emit_byte(OP_TRUE);
+        break;
+    default:
+        return;
+    }
 }
 
 void grouping() {
@@ -134,11 +149,12 @@ void grouping() {
 
 void unary() {
     TokenType opType = parser.previous.type;
-    // Compiles the operand
     parse_precedence(PREC_UNARY);
 
-    // Emit operator instruction.
     switch (opType) {
+    case TOKEN_BANG:
+        emit_byte(OP_NOT);
+        break;
     case TOKEN_MINUS:
         emit_byte(OP_NEGATE);
         break;
@@ -182,7 +198,7 @@ ParseRule rules[] = {
     [TOKEN_SEMICOLON] = {NULL, NULL, PREC_NONE},
     [TOKEN_SLASH] = {NULL, binary, PREC_FACTOR},
     [TOKEN_STAR] = {NULL, binary, PREC_FACTOR},
-    [TOKEN_BANG] = {NULL, NULL, PREC_NONE},
+    [TOKEN_BANG] = {unary, NULL, PREC_NONE},
     [TOKEN_BANG_EQUAL] = {NULL, NULL, PREC_NONE},
     [TOKEN_EQUAL] = {NULL, NULL, PREC_NONE},
     [TOKEN_EQUAL_EQUAL] = {NULL, NULL, PREC_NONE},
@@ -196,17 +212,17 @@ ParseRule rules[] = {
     [TOKEN_AND] = {NULL, NULL, PREC_NONE},
     [TOKEN_CLASS] = {NULL, NULL, PREC_NONE},
     [TOKEN_ELSE] = {NULL, NULL, PREC_NONE},
-    [TOKEN_FALSE] = {NULL, NULL, PREC_NONE},
+    [TOKEN_FALSE] = {parse_literal, NULL, PREC_NONE},
     [TOKEN_FOR] = {NULL, NULL, PREC_NONE},
     [TOKEN_FUN] = {NULL, NULL, PREC_NONE},
     [TOKEN_IF] = {NULL, NULL, PREC_NONE},
-    [TOKEN_NIL] = {NULL, NULL, PREC_NONE},
+    [TOKEN_NIL] = {parse_literal, NULL, PREC_NONE},
     [TOKEN_OR] = {NULL, NULL, PREC_NONE},
     [TOKEN_PRINT] = {NULL, NULL, PREC_NONE},
     [TOKEN_RETURN] = {NULL, NULL, PREC_NONE},
     [TOKEN_SUPER] = {NULL, NULL, PREC_NONE},
     [TOKEN_THIS] = {NULL, NULL, PREC_NONE},
-    [TOKEN_TRUE] = {NULL, NULL, PREC_NONE},
+    [TOKEN_TRUE] = {parse_literal, NULL, PREC_NONE},
     [TOKEN_VAR] = {NULL, NULL, PREC_NONE},
     [TOKEN_WHILE] = {NULL, NULL, PREC_NONE},
     [TOKEN_ERROR] = {NULL, NULL, PREC_NONE},

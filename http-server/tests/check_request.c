@@ -1,8 +1,7 @@
 #include <check.h>
 #include <stdbool.h>
-#include <stdlib.h>
 
-#include "../request.h"
+#include "../include/request.h"
 
 START_TEST(test_parse_request_post_home) {
     request req = parse_request("POST /home");

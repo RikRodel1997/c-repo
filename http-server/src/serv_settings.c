@@ -1,4 +1,4 @@
-#include "../serv_settings.h"
+#include "../include/serv_settings.h"
 
 int bind_to_port(int server_sock, addr_in serv_addr);
 addr_in create_addr_in(uint16_t port);
@@ -56,6 +56,4 @@ addr_in create_addr_in(uint16_t port) {
     return addr;
 }
 
-struct sockaddr* to_sockaddr(addr_in* addr) {
-    return (struct sockaddr*) addr;
-}
+struct sockaddr* to_sockaddr(addr_in* addr) { return (struct sockaddr*) addr; }

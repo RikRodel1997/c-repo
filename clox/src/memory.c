@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#include "../__test__/mocks.h"
-#include "../memory.h"
+#include "../include/memory.h"
+#include "../tests/mocks.h"
 
 /*
     The 2 size arguments control which operation to perform
