@@ -24,7 +24,8 @@
     "common.h": "c",
     "scanner.h": "c",
     "compiler.h": "c",
-    "stdint.h": "c"
+    "stdint.h": "c",
+    "serv_settings.h": "c"
   },
   "clang-format.executable": "C:/Program Files/LLVM/bin/clang-format.exe"
 }
